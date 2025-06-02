@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import db, jwt, cors
+from .extensions import db, jwt, cors, migrate
 from .routes.auth import auth_bp
 from .routes.cars import cars_bp
 
@@ -8,6 +8,7 @@ def create_app():
     app.config.from_object('app.config.Config')
 
     db.init_app(app)
+    migrate.init_app(app, db)
     jwt.init_app(app)
     cors.init_app(app)
 
