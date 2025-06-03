@@ -19,8 +19,9 @@ class Car(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     brand = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    image_url = db.Column(db.String(255))
-    model_url = db.Column(db.String(255))  # 3D model URL
-    description = db.Column(db.Text)
+    price = db.Column(db.Float, nullable=False)  
+    year = db.Column(db.Integer, nullable=False)
+    image_url = db.Column(db.String(255), nullable=True)
+    model_3d_url = db.Column(db.String(255), nullable=True)
+    description = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

@@ -13,6 +13,7 @@ def get_all_cars():
         "name": car.name,
         "brand": car.brand,
         "price": car.price,
+        "year": car.year,
         "image_url": car.image_url,
         "model_url": car.model_url,
         "description": car.description
@@ -25,10 +26,18 @@ def add_car():
     if not user["is_admin"]:
         return jsonify({"message": "Admins only"}), 403
     data = request.get_json()
-    car = Car(**data)
-    db.session.add(car)
+    new_car = Car(
+        name=data['name'],
+        brand=data['brand'],
+        price=data['price'],
+        year=data['year'],
+        image_url=data.get('image_url'),
+        model_3d_url=data.get('model_3d_url'),
+        description=data.get('description'),
+    )
+    db.session.add(new_car)
     db.session.commit()
-    return jsonify({"message": "Car added"}), 201
+    return jsonify({"message": "Car added successfully"}), 201
 
 @cars_bp.route("/<int:id>", methods=["PUT"])
 @jwt_required()
@@ -49,7 +58,9 @@ def delete_car(id):
     user = get_jwt_identity()
     if not user["is_admin"]:
         return jsonify({"message": "Admins only"}), 403
-    car = Car.query.get_or_404(id)
+    car = Car.query.get(id)
+    if not car:
+        return jsonify({"error": "Car not found"}), 404
     db.session.delete(car)
     db.session.commit()
     return jsonify({"message": "Car deleted"})
